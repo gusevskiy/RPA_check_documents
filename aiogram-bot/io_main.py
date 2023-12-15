@@ -21,6 +21,7 @@ pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
 @dp.message(F.document)
 async def save_file(message: types.Message, bot: Bot):
     name_file = message.document.file_name
+    print(name_file)
     if name_file.endswith(".pdf") | name_file.endswith(".xlsx"):
         file_id = message.document.file_id
         file = await bot.get_file(file_id)
