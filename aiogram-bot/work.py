@@ -2,6 +2,8 @@ import os
 import re
 import fitz
 import fnmatch
+from read_xlsx import color_xlsx_cell
+from openpyxl.styles import Font, Color, PatternFill
 
 # xlsx_file = ''
 # pdf_file = ''
@@ -50,8 +52,19 @@ def file_regex_search(all_text_from_pdf):
     Возвращает список со всеми найдеными совпадениями
     """
     reg = r"\d{2}\.\d{2}\.\d{2}[\s|\\n]*[А-яЁё]{0,7}[\s|\\n]*\(\d{0,4}[\s|\\n]*от[\s|\\n]\d{2}[\s|\\n]*\.\d{2}\.\d{4}\)[\s|\\n]*\d{0,4}[\s|\\n]*\d{3}\,\d{2}"
-    list_matches = re.findall(reg, all_text_from_pdf)
-    return list_matches
+    list_matches_pdf_file = re.findall(reg, all_text_from_pdf)
+    return list_matches_pdf_file
+
+
+def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
+    """ Принимает список всех совпадений из pdf_file и ссылку на xlsx_file
+        передает их в функцию color_xlsx_cell в файле read_xlsx
+        результат формируется копия xlsx_file => result.xlsx
+        со всеми пометками совпадений.
+    """
+    color_xlsx_cell(list_matches_pdf_file, xlsx_file)
+
+    
 
 
 def main():
@@ -60,7 +73,8 @@ def main():
     all_text_from_pdf = ''
     if 'pdf_file' in globals():
         all_text_from_pdf = read_pdf_file(pdf_file)
-    print(file_regex_search(all_text_from_pdf))
+    list_matches_pdf_file = file_regex_search(all_text_from_pdf)
+    search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
 
 
 if __name__ == '__main__':
