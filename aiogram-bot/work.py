@@ -46,7 +46,7 @@ def read_pdf_file(file_path):
     return str(all_text_from_pdf)
 
 
-def file_regex_search(all_text_from_pdf):
+def file_regex_search(all_text_from_pdf: str):
     """
     Принимает строку текста 
     Возвращает список со всеми найдеными совпадениями
