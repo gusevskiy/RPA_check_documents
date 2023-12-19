@@ -46,6 +46,11 @@ def read_pdf_file(file_path):
     return str(all_text_from_pdf)
 
 
+def check_verification_act(all_text_from_pdf):
+    if "акт сверки" in all_text_from_pdf[0:20].lower():
+        print(all_text_from_pdf[0:20].lower())
+
+
 def file_regex_search(all_text_from_pdf: str):
     """
     Принимает строку текста 
@@ -73,8 +78,9 @@ def main():
     all_text_from_pdf = ''
     if 'pdf_file' in globals():
         all_text_from_pdf = read_pdf_file(pdf_file)
-    list_matches_pdf_file = file_regex_search(all_text_from_pdf)
-    search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
+    # list_matches_pdf_file = file_regex_search(all_text_from_pdf)
+    # search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
+    check_verification_act(all_text_from_pdf)
 
 
 if __name__ == '__main__':
