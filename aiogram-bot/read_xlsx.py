@@ -15,7 +15,7 @@ def color_xlsx_cell(list_matches_pdf_file, xlsx_file):
         # Разбиваем на группы каждый элемент из list_matches_pdf_file
         # Группы =>  date_document, number_document, amount_invoice
         dict_match = re.search(reg_groups, match).groupdict()
-        for row in sheet.iter_rows():  # итерируемся по кождой строке в xlsx_file
+        for row in sheet.iter_rows():  # итерируемся по каждой строке в xlsx_file
             pdf_date = dict_match['date_document']  # Даты не используются
             pdf_number = dict_match['number_document']
             pdf_amount = dict_match['amount_invoice'].replace(' ', '').split(",")[0].split(",")[0]

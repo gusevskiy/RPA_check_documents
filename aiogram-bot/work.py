@@ -2,6 +2,9 @@ import os
 import re
 import fitz
 import fnmatch
+import openpyxl
+import logging
+import sys
 from read_xlsx import color_xlsx_cell
 from openpyxl.styles import Font, Color, PatternFill
 
@@ -46,9 +49,17 @@ def read_pdf_file(file_path):
     return str(all_text_from_pdf)
 
 
-def check_verification_act(all_text_from_pdf):
+def check_verification_act(all_text_from_pdf, xlsx_file):
+    wb = openpyxl.reader.excel.load_workbook(filename=xlsx_file)
+    wb.active = 0
+    sheet = wb.active
+    if "акт сверки" in sheet['D1'].value.lower():
+        title_xlsx = f"{sheet['D1'].value} {sheet['B2'].value} {sheet['B3'].value}"
+    reg = r"(?P<title_pdf>Акт[\s]*сверки[\s\S]*период:[\s\S]*)Мы"
     if "акт сверки" in all_text_from_pdf[0:20].lower():
-        print(all_text_from_pdf[0:20].lower())
+        title_pdf = re.findall(reg, all_text_from_pdf) 
+    
+    return title_pdf, title_xlsx
 
 
 def file_regex_search(all_text_from_pdf: str):
@@ -75,13 +86,26 @@ def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
 def main():
     pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
     check_files(pathfile)
+    logging.info('Получино два файла pdf и xlsx')
     all_text_from_pdf = ''
     if 'pdf_file' in globals():
         all_text_from_pdf = read_pdf_file(pdf_file)
+        # logging.info('')
     # list_matches_pdf_file = file_regex_search(all_text_from_pdf)
     # search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
-    check_verification_act(all_text_from_pdf)
+    print(*check_verification_act(all_text_from_pdf, xlsx_file))
 
 
 if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[
+            logging.FileHandler(
+                os.path.abspath('bot_log.log'), mode='w', encoding='UTF-8'
+            ),
+            logging.StreamHandler(stream=sys.stdout)
+        ],
+        format='%(asctime)s, %(levelname)s, %(funcName)s, '
+               '%(lineno)s, %(name)s, %(message)s'
+    )
     main()

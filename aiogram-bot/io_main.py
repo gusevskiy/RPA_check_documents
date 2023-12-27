@@ -28,6 +28,8 @@ async def save_file(message: types.Message, bot: Bot):
         file_path = file.file_path
         name_file = message.document.file_name
         # нужно создать папку chat_files если ее нет
+        if not os.path.exists(pathfile):
+            os.makedirs(pathfile)
         destination=f"{pathfile}\\{name_file}"
         await bot.download_file(file_path, destination=destination)
     else:
