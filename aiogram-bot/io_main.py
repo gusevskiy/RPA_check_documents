@@ -10,16 +10,21 @@ load_dotenv()
 
 
 TELEGRAM_TOKEN = os.getenv('TOKEN')
-TELEGRAM_CHAT_ID = list[os.getenv('CHAT_ID')]
+TELEGRAM_CHAT_ID = os.getenv('CHAT_ID')
+pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
+
 # Объект бота
 bot = Bot(token=TELEGRAM_TOKEN)
 # Диспетчер
 dp = Dispatcher()
-pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
 
 
 @dp.message(F.document)
 async def save_file(message: types.Message, bot: Bot):
+    """ 
+    Получены файлы в чат, если pdf или xlsx 
+    сохраниет их в папку chat_files.
+    """
     name_file = message.document.file_name
     print(name_file)
     if name_file.endswith(".pdf") | name_file.endswith(".xlsx"):
@@ -38,6 +43,9 @@ async def save_file(message: types.Message, bot: Bot):
 
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
+    """ 
+    Создание кнопок, а текст на кнопках это команды
+    """
     kb = [
         [types.KeyboardButton(text="Кнопка 1")],
         [types.KeyboardButton(text="удалить файлы")]
@@ -52,9 +60,12 @@ async def cmd_start(message: types.Message):
 
 
 @dp.message()
-async def send_message(message: types.Message):
+async def send_message(message: types.Message, ):
+    """
+    Реагирует на тектс в чате.
+    """
     adm = TELEGRAM_CHAT_ID
-    if message.chat.id not in adm:
+    if str(message.chat.id) not in adm:
         await bot.send_message(message.chat.id, 'Мой хозяин вас не знает, '
                                                 'мне запрещено с '
                                                 'вами разговаривать!!!')
@@ -71,8 +82,8 @@ async def send_message(message: types.Message):
         )
 
 
-# Запуск процесса поллинга новых апдейтов
 async def main():
+    
     logging.basicConfig(level=logging.INFO)
     
     

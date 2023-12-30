@@ -50,6 +50,10 @@ def read_pdf_file(file_path):
 
 
 def check_verification_act(all_text_from_pdf, xlsx_file):
+    """
+    Проверяет названия документов, то что это акты сверки.
+    Возвращает заголовки из этих документов: название, период, юр. л.
+    """
     wb = openpyxl.reader.excel.load_workbook(filename=xlsx_file)
     wb.active = 0
     sheet = wb.active
