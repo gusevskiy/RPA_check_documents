@@ -9,14 +9,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-TOKEN = os.getenv('TOKEN')
-# Включаем логирование, чтобы не пропустить важные сообщения
-logging.basicConfig(level=logging.INFO)
+TELEGRAM_TOKEN = os.getenv('TOKEN')
+TELEGRAM_CHAT_ID = list[os.getenv('CHAT_ID')]
 # Объект бота
-bot = Bot(token=TOKEN)
+bot = Bot(token=TELEGRAM_TOKEN)
 # Диспетчер
 dp = Dispatcher()
 pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
+
 
 @dp.message(F.document)
 async def save_file(message: types.Message, bot: Bot):
@@ -53,7 +53,7 @@ async def cmd_start(message: types.Message):
 
 @dp.message()
 async def send_message(message: types.Message):
-    adm = [452054525, ]
+    adm = TELEGRAM_CHAT_ID
     if message.chat.id not in adm:
         await bot.send_message(message.chat.id, 'Мой хозяин вас не знает, '
                                                 'мне запрещено с '
@@ -73,6 +73,11 @@ async def send_message(message: types.Message):
 
 # Запуск процесса поллинга новых апдейтов
 async def main():
+    logging.basicConfig(level=logging.INFO)
+    
+    
+    # Запускаем бота и пропускаем все накопленные входящие
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

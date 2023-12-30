@@ -64,7 +64,7 @@ def check_verification_act(all_text_from_pdf, xlsx_file):
 
 def file_regex_search(all_text_from_pdf: str):
     """
-    Принимает строку текста 
+    Принимает строку текста  
     Возвращает список со всеми найдеными совпадениями
     """
     reg = r"\d{2}\.\d{2}\.\d{2}[\s|\\n]*[А-яЁё]{0,7}[\s|\\n]*\(\d{0,4}[\s|\\n]*от[\s|\\n]\d{2}[\s|\\n]*\.\d{2}\.\d{4}\)[\s|\\n]*\d{0,4}[\s|\\n]*\d{3}\,\d{2}"
