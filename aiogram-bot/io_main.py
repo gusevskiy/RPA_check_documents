@@ -4,6 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters.command import Command
 from dotenv import load_dotenv
+from work import main1
 
 
 load_dotenv()
@@ -26,7 +27,6 @@ async def save_file(message: types.Message, bot: Bot):
     сохраниет их в папку chat_files.
     """
     name_file = message.document.file_name
-    print(name_file)
     if name_file.endswith(".pdf") | name_file.endswith(".xlsx"):
         file_id = message.document.file_id
         file = await bot.get_file(file_id)
@@ -41,14 +41,19 @@ async def save_file(message: types.Message, bot: Bot):
         await message.answer(text='Мне такое расширение файлов не нужно!')
 
 
+def delete_file(pathfile):
+    # if os.path.exists(pathfile):
+    for filename in os.listdir(pathfile):
+        os.remove(pathfile+"\\"+filename)
+
+
 @dp.message(Command("start"))
 async def cmd_start(message: types.Message):
     """ 
     Создание кнопок, а текст на кнопках это команды
     """
     kb = [
-        [types.KeyboardButton(text="Кнопка 1")],
-        [types.KeyboardButton(text="удалить файлы")]
+        [types.KeyboardButton(text="проверить")],
     ]
     keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
     await message.answer(
@@ -60,20 +65,24 @@ async def cmd_start(message: types.Message):
 
 
 @dp.message()
-async def send_message(message: types.Message, ):
+async def send_message(message: types.Message):
     """
     Реагирует на тектс в чате.
     """
+    chat_id = message.chat.id
     adm = TELEGRAM_CHAT_ID
+    # file_send = pathfile+'\\'+''.join([name for name in os.listdir(pathfile) if name.endswith('.xlsx')])
+    file_send = 'C:\\DEV_python\\RPA_check_documents\\test.xlsx'
     if str(message.chat.id) not in adm:
         await bot.send_message(message.chat.id, 'Мой хозяин вас не знает, '
                                                 'мне запрещено с '
                                                 'вами разговаривать!!!')
-    elif message.text == 'удалить файлы':
+    elif message.text == 'проверить':
+        main1()
+        # await message.reply_document(open("test.xlsx", 'rb'))
+        await bot.send_document(chat_id, open(file_send, 'rb'))
+        # delete_file(pathfile)
         
-        if os.path.exists(pathfile):
-            for filename in os.listdir(pathfile):
-                os.remove(pathfile+"\\"+filename)
     else:
         await message.answer(
             text='Не надо мне писать, \n'
@@ -82,10 +91,8 @@ async def send_message(message: types.Message, ):
         )
 
 
-async def main():
-    
+async def main() -> None:
     logging.basicConfig(level=logging.INFO)
-    
     
     # Запускаем бота и пропускаем все накопленные входящие
     await bot.delete_webhook(drop_pending_updates=True)
@@ -93,3 +100,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+    # pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
+    # print(pathfile+'\\'+''.join([name for name in os.listdir(pathfile) if name.endswith('.xlsx')]))

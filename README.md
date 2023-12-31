@@ -18,6 +18,8 @@ vim .env
 
 [documentations diogramms github](https://docs.github.com/ru/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams)
 
+[documentations telegramm](https://core.telegram.org/bots/api#sending-files)
+
 
 ## scheme
 ```mermaid

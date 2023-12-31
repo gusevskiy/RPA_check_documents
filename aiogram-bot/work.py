@@ -36,7 +36,7 @@ def check_files(pathfile):
         return False
 
 
-def read_pdf_file(file_path):
+def read_pdf_file(file_path) -> str:
     """
     Принимает ссылку на файл pdf 
     возвращает весь извлеченный текст в формате строки.
@@ -49,7 +49,7 @@ def read_pdf_file(file_path):
     return str(all_text_from_pdf)
 
 
-def check_verification_act(all_text_from_pdf, xlsx_file):
+def check_verification_act(all_text_from_pdf, xlsx_file) -> str:
     """
     Проверяет названия документов, то что это акты сверки.
     Возвращает заголовки из этих документов: название, период, юр. л.
@@ -66,7 +66,7 @@ def check_verification_act(all_text_from_pdf, xlsx_file):
     return title_pdf, title_xlsx
 
 
-def file_regex_search(all_text_from_pdf: str):
+def file_regex_search(all_text_from_pdf: str) -> list:
     """
     Принимает строку текста  
     Возвращает список со всеми найдеными совпадениями
@@ -84,20 +84,20 @@ def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
     """
     color_xlsx_cell(list_matches_pdf_file, xlsx_file)
 
-    
 
-
-def main():
-    pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
-    check_files(pathfile)
-    logging.info('Получино два файла pdf и xlsx')
-    all_text_from_pdf = ''
-    if 'pdf_file' in globals():
+def main1():
+    try:
+        pathfile=f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
+        check_files(pathfile)
+        logging.info('Получино два файла pdf и xlsx')
         all_text_from_pdf = read_pdf_file(pdf_file)
-        # logging.info('')
-    # list_matches_pdf_file = file_regex_search(all_text_from_pdf)
-    # search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
-    print(*check_verification_act(all_text_from_pdf, xlsx_file))
+        logging.info('Текст из pdf_file получен')
+        list_matches_pdf_file = file_regex_search(all_text_from_pdf)
+        logging.info('совпадения из pdf_file получены')
+        search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
+        logging.info('Файл xlsx_file раскрашен')
+    except Exception as e:
+        print(e, 'Error')
 
 
 if __name__ == '__main__':
@@ -112,4 +112,4 @@ if __name__ == '__main__':
         format='%(asctime)s, %(levelname)s, %(funcName)s, '
                '%(lineno)s, %(name)s, %(message)s'
     )
-    main()
+    main1()
