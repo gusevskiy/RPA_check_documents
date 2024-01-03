@@ -85,7 +85,7 @@ async def send_message(message: types.Message):
         main1()
         # await message.reply_document(open("test.xlsx", 'rb'))
         await bot.send_document(chat_id, FSInputFile(file_send))
-        # delete_file(pathfile)
+        delete_file(pathfile)
         
     else:
         await message.answer(
