@@ -7,7 +7,7 @@ from openpyxl.styles import PatternFill
 reg_groups = r"(?P<date_document>\d{2}\.\d{2}\.\d{2})[\s|\\n]*(?P<operation>[А-яЁё]{0,7})[\s|\\n]*\((?P<number_document>\d{0,5})[\s|\\n]*от[\s|\\n]\d{2}[\s|\\n]*\.\d{2}\.\d{4}\)[\s|\\n]*(?P<amount_invoice>\d{0,4}[\s|\\n]*\d{3}\,\d{2})"
 
 def color_xlsx_cell(list_matches_pdf_file, xlsx_file):
-    """ Принимает список всех совпадений из pdf_file и ссылку на xlsx_file
+    """ Принимает список всех совпадений из pdf_file, и ссылку на xlsx_file
         результат формируется перезапись xlsx_file => *.xlsx
         со всеми пометками совпадений.
     """
