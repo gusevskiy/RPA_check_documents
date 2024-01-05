@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, F
-from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, ContentType
+from aiogram.filters import Command
+# from aiogram.types import Message, ContentType
 from core.handlers.basic import get_start, get_photo, get_hello
 from core.filters.iscontact import IsTrueContact
 from core.handlers.contact import get_fake_contact, get_true_contact
@@ -8,7 +8,6 @@ import asyncio
 import logging
 from core.settings import settings
 
-# token = '6513692439:AAFFgGmpXQfJzFsEUSiEP3FFK5QIZNqimO4'
 
 async def start_bot(bot: Bot):
     await bot.send_message(settings.bots.admin_id, text="Bot started")
