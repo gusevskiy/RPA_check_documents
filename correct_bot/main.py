@@ -9,6 +9,9 @@ import logging
 from core.settings import settings
 from core.utils.commands import set_commands
 from core.handlers.basic import get_location
+from core.handlers.basic import get_inline
+from core.handlers.callback import select_macbook
+from core.utils.callbackdata import MacInfo
 
 
 async def start_bot(bot: Bot):
@@ -30,6 +33,9 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
+    # dp.callback_query.register(select_macbook, F.data.startswith('apple_'))
+    dp.callback_query.register(select_macbook, MacInfo.filter()) # можно установить фильтер на модель pro "MacInfo.filter(F.model == 'pro')
+    dp.message.register(get_inline, Command(commands='inline'))
     dp.message.register(get_photo, F.photo)
     dp.message.register(get_location, F.location)
     dp.message.register(get_true_contact, F.contact, IsTrueContact())

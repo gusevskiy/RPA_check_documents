@@ -2,6 +2,15 @@ from aiogram import Bot
 from aiogram.types import Message
 import json
 from core.keyboards.reply import reply_keyboard, loc_tel_poll_keyboard, get_reply_keyboard
+from core.keyboards.inline import select_macbook, get_inline_keyboard
+
+
+async def get_inline(message: Message, bot: Bot):
+    await message.answer(
+        f"Hi, {message.from_user.first_name}. Showing inline buttons",
+        # reply_markup=select_macbook
+        reply_markup=get_inline_keyboard()
+    )
 
 
 async def get_start(message: Message, bot: Bot):
