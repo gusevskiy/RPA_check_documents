@@ -1,11 +1,21 @@
 from aiogram import Bot
 from aiogram.types import Message
 import json
+from core.keyboards.reply import reply_keyboard, loc_tel_poll_keyboard, get_reply_keyboard
 
 
 async def get_start(message: Message, bot: Bot):
     await message.answer(
-        f"Hi {message.from_user.first_name}. It's good to see you!"
+        f"Hi {message.from_user.first_name}. It's good to see you!",
+        # select keyboard from keyboards/reply.py
+        reply_markup=get_reply_keyboard()
+    )
+
+
+async def get_location(message: Message, bot: Bot):
+    await message.answer(
+        f"You send location!\r\a"
+        f"{message.location.latitude}\r\n{message.location.longitude}"
     )
 
 

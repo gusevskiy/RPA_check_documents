@@ -7,9 +7,12 @@ from core.handlers.contact import get_fake_contact, get_true_contact
 import asyncio
 import logging
 from core.settings import settings
+from core.utils.commands import set_commands
+from core.handlers.basic import get_location
 
 
 async def start_bot(bot: Bot):
+    await set_commands(bot)
     await bot.send_message(settings.bots.admin_id, text="Bot started")
 
 
@@ -28,6 +31,7 @@ async def start():
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
     dp.message.register(get_photo, F.photo)
+    dp.message.register(get_location, F.location)
     dp.message.register(get_true_contact, F.contact, IsTrueContact())
     dp.message.register(get_fake_contact, F.contact)
     dp.message.register(get_hello, F.text == 'hello')
