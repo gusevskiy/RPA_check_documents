@@ -153,7 +153,7 @@ async def main() -> None:
     await dp.start_polling(bot)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # asyncio.run(main())
     # if create_path_files(pathfile):
     #     print('yes')
