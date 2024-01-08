@@ -6,6 +6,7 @@ from dataclasses import dataclass
 class Bots:
     bot_token: str
     admin_id: int
+    path_folder: str
 
 
 @dataclass
@@ -21,7 +22,8 @@ def get_settings(path: str):
     return Settings(
         bots=Bots(
             bot_token=env.str("TOKEN"),  # str
-            admin_id=env.int("ADMIN_ID")  # int
+            admin_id=env.int("ADMIN_ID"),  # int
+            path_folder=env.str("PATH_FOLDER")
         )
     )
 

@@ -5,11 +5,11 @@
 python -m venv venv && . venv/Scripts/activate
 pip install -r requirements.txt 
 ```
-### Create file .env
+### Create file input
 ```bash
-vim .env
+vim input
 ```
-#### add in .env TOKEN = "yor token telegram bot" 
+#### add in file/input TOKEN = "yor token telegram bot" and CHAT_ID = "you number chat"
 
 #### training materials
 [Exsample training aiogram3](https://mastergroosha.github.io/aiogram-3-guide/filters-and-middlewares/)
@@ -20,6 +20,12 @@ vim .env
 
 [documentations telegramm](https://core.telegram.org/bots/api#sending-files)
 
+### Exsample code aiogrm on github
+[orders bot](https://github.com/darksidecat/orders_bot/blob/master/redis.conf)
+
+[cost_confirmation_bot](https://github.com/darksidecat/cost_confirmation_bot/blob/main/app/tgbot/filters/access_level.py)
+
+[Shvatka](https://github.com/bomzheg/Shvatka/blob/master/shvatka/tgbot/models/hint.py)
 
 ## scheme
 ```mermaid
