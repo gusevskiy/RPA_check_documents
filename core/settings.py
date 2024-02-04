@@ -29,5 +29,5 @@ def get_settings(path: str):
 
 
 # Считавем настройки из файла input
-settings = get_settings('input')
+settings = get_settings('../input')
 # print(settings)  # test print
