@@ -15,7 +15,6 @@ from core.settings import settings
 #     )
 #     await state.set_state(StepsDocuments.GET_DOCUMENT)
 
-
 async def get_document(message: Message, state: FSMContext):
     await message.answer(
         f"{message.from_user.first_name},"
