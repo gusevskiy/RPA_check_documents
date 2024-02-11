@@ -3,7 +3,10 @@ from aiogram.filters import Command, CommandStart
 import asyncio
 import logging
 from core.settings import settings
-from core.handlers.basic import get_start, get_document
+from core.handlers.basic import get_start
+from core.handlers import documents
+from core.utils.statedocuments import StepsDocuments
+from core.utils import downloads
 
 
 async def start_bot(bot: Bot):
@@ -26,7 +29,11 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
-    dp.message.register(get_document, F.document)
+
+    dp.message.register(documents.get_document, Command(commands="form"))
+    dp.message.register(documents.answer, StepsDocuments.GET_DOCUMENT)
+
+
     dp.message.register(get_start, CommandStart())
     try:
         await dp.start_polling(bot)

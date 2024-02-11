@@ -21,7 +21,7 @@ async def set_commands(bot: Bot):
             description='showing inline buttons'
         ),
         BotCommand(
-            command='documents',
+            command='form',
             description='отправьте документы'
         )
     ]
