@@ -9,9 +9,14 @@ pip install -r requirements.txt
 ```bash
 vim input
 ```
-#### add in file/input TOKEN = "yor token telegram bot" and CHAT_ID = "you number chat"
+### add in file/input 
+#### TOKEN = "yor token telegram bot"
+#### CHAT_ID = "you number chat"
+#### PATH_FOLDER = "folder for saving documents"
 
 #### training materials
+https://docs.aiogram.dev/en/latest/dispatcher/finite_state_machine/index.html
+
 [Exsample training aiogram3](https://mastergroosha.github.io/aiogram-3-guide/filters-and-middlewares/)
 
 [Создание диаграмм github](https://habr.com/ru/articles/652867/) # Хабр
