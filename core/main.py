@@ -32,7 +32,7 @@ async def start():
 
     dp.message.register(documents.req_document, Command(commands="form"))
     dp.message.register(documents.get_document, StepsDocuments.GET_DOCUMENT)
-    dp.message.register(documents.check_document, StepsDocuments.CHECK_DOCUMENT)
+    # dp.message.register(documents.check_document, StepsDocuments.CHECK_DOCUMENT)
 
     dp.message.register(get_start, CommandStart())
     try:

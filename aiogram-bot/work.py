@@ -1,6 +1,6 @@
 import os
 import re
-import fitz
+# import fitz
 import openpyxl
 import logging
 import sys
