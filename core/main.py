@@ -10,17 +10,19 @@ from core.utils.statedocuments import StepsDocuments
 from core.utils import downloads
 
 
-async def start_bot(bot: Bot):
+async def start_bot(bot: Bot) -> None:
+    """notyfi Started Bot"""
     await bot.send_message(
         settings.bots.admin_id, text="Bot started, press /start "
     )
 
 
-async def stop_bot(bot: Bot):
+async def stop_bot(bot: Bot) -> None:
+    """notyfi Stopped Bot"""
     await bot.send_message(settings.bots.admin_id, text="Bot stopped")
 
 
-async def start():
+async def start() -> None:
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s - [%(levelname)s] - %(name)s - "
                         "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s"
@@ -36,8 +38,8 @@ async def start():
     dp.message.register(basic.instruction, Command(commands="help"))
     dp.message.register(documents.check_document, Command(commands="check"))
     dp.message.register(basic.response_to_test, F.text)
-    # dp.message.register(documents.get_document, StepsDocuments)
-    dp.message.register(documents.get_document, F.document)
+    # dp.message.register(documents.req_document, StepsDocuments.GET_DOCUMENT)
+    # dp.message.register(documents.check_input, F.document)
     # dp.message.register(documents.check_document, StepsDocuments.CHECK_DOCUMENT)
 
     try:

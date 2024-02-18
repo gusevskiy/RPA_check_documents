@@ -38,6 +38,7 @@ async def check_document(message: Message, bot: Bot, state: FSMContext):
         case 1:
             await message.answer("Получил Один файл. Ну что мне с ним делать. Нажми /help")
             await state.clear()  # Очищаем состояние
+            await state.set_state(StepsDocuments.GET_DOCUMENT)
         case 2:
             await message.reply("Получил два файла!")
             files_size = 50000 < (files_info[0]["file_size"] + files_info[1]["file_size"])

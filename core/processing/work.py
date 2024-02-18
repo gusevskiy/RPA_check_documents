@@ -11,11 +11,13 @@ from core.settings import settings
 
 def get_path_files(folder):
     print(folder)
-    links_to_files = []
+    links_to_files = {}
     for i in os.listdir(folder):
-        print(folder+"\\"+i)
+        if i.endswith(".pdf"):
+            links_to_files["pdf"] = f"{folder}\\{i}"
+        if i.endswith(".xlsx"):
+            links_to_files["xlsx"] = f"{folder}\\{i}"
     print(links_to_files)
-
 
 
 def read_pdf_file(file_path) -> str:
