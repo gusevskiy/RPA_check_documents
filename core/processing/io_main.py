@@ -35,61 +35,61 @@ keyboard = InlineKeyboardMarkup(
 )
 
 
-def create_path_files(pathfile):
-    """
-    Функция принимает путь к папке с сохраненными файлами
-    из телеграмм.
-    Проверяет что файл '*.pdf' = 1 и '*.xlsx' = 1
-    создает две глобальные переменные на эти два файла
-    """
-    if len(
-        fnmatch.filter(os.listdir(pathfile), '*.pdf')
-    ) == 1 and len(
-        fnmatch.filter(os.listdir(pathfile), '*.xlsx')
-    ) == 1:
-        global pdf_file
-        global xlsx_file
-        for i in os.listdir(pathfile):
-            if i.endswith('.pdf'):
-                pdf_file = f'{pathfile}\\{i}'
-            if i.endswith('.xlsx'):
-                xlsx_file = f'{pathfile}\\{i}'
-        return True
-    else:
-        return False
-
-
-@dp.message(F.document)
-async def save_file(message: types.Message, bot: Bot):
-    """ 
-    Получены файлы в чат, если pdf или xlsx 
-    сохранит их в папку chat_files.
-    """
-    name_file = message.document.file_name
-    # Минимальная проверка на этапе загрузки, тк на стадии загрузки
-    # не прочитав файлы сделать что-то большее наверно нельзя
-    if name_file.endswith(".pdf") | name_file.endswith(".xlsx"):
-        file_id = message.document.file_id
-        file = await bot.get_file(file_id)
-        file_path = file.file_path
-        name_file = message.document.file_name
-        # нужно создать папку chat_files если ее нет
-        if not os.path.exists(pathfile):
-            os.makedirs(pathfile)
-        destination = f"{pathfile}\\{name_file}"
-        # Сохраняет файлы в папку
-        await bot.download_file(file_path, destination=destination)
-        if create_path_files(pathfile):
-            # Получаем заголовки из файлов для отправки их в чат для проверки.
-            text_title = str(work_main(pdf_file, xlsx_file))
-            # Отправляем заголовки в чат
-            # тк ф-я срабатывает на каждый файл то первый N one пропускаем
-            if text_title != 'None':
-                await message.answer(text_title, reply_markup=keyboard)
-        else:
-            await message.answer(text='Нужно отправить два акта сверки pdf и xlsx!')
-    else:
-        await message.answer(text='Мне такое расширение файлов не нужно!')
+# def create_path_files(pathfile):
+#     """
+#     Функция принимает путь к папке с сохраненными файлами
+#     из телеграмм.
+#     Проверяет что файл '*.pdf' = 1 и '*.xlsx' = 1
+#     создает две глобальные переменные на эти два файла
+#     """
+#     if len(
+#         fnmatch.filter(os.listdir(pathfile), '*.pdf')
+#     ) == 1 and len(
+#         fnmatch.filter(os.listdir(pathfile), '*.xlsx')
+#     ) == 1:
+#         global pdf_file
+#         global xlsx_file
+#         for i in os.listdir(pathfile):
+#             if i.endswith('.pdf'):
+#                 pdf_file = f'{pathfile}\\{i}'
+#             if i.endswith('.xlsx'):
+#                 xlsx_file = f'{pathfile}\\{i}'
+#         return True
+#     else:
+#         return False
+#
+#
+# @dp.message(F.document)
+# async def save_file(message: types.Message, bot: Bot):
+#     """
+#     Получены файлы в чат, если pdf или xlsx
+#     сохранит их в папку chat_files.
+#     """
+#     name_file = message.document.file_name
+#     # Минимальная проверка на этапе загрузки, тк на стадии загрузки
+#     # не прочитав файлы сделать что-то большее наверно нельзя
+#     if name_file.endswith(".pdf") | name_file.endswith(".xlsx"):
+#         file_id = message.document.file_id
+#         file = await bot.get_file(file_id)
+#         file_path = file.file_path
+#         name_file = message.document.file_name
+#         # нужно создать папку chat_files если ее нет
+#         if not os.path.exists(pathfile):
+#             os.makedirs(pathfile)
+#         destination = f"{pathfile}\\{name_file}"
+#         # Сохраняет файлы в папку
+#         await bot.download_file(file_path, destination=destination)
+#         if create_path_files(pathfile):
+#             # Получаем заголовки из файлов для отправки их в чат для проверки.
+#             text_title = str(work_main(pdf_file, xlsx_file))
+#             # Отправляем заголовки в чат
+#             # тк ф-я срабатывает на каждый файл то первый N one пропускаем
+#             if text_title != 'None':
+#                 await message.answer(text_title, reply_markup=keyboard)
+#         else:
+#             await message.answer(text='Нужно отправить два акта сверки pdf и xlsx!')
+#     else:
+#         await message.answer(text='Мне такое расширение файлов не нужно!')
 
 
 def delete_file(pathfile):

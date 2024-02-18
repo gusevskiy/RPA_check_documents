@@ -1,9 +1,10 @@
+import logging
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command, CommandStart
 import asyncio
 import logging
 from core.settings import settings
-from core.handlers.basic import get_start
+from core.handlers import basic
 from core.handlers import documents
 from core.utils.statedocuments import StepsDocuments
 from core.utils import downloads
@@ -30,12 +31,18 @@ async def start():
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
 
+    dp.message.register(basic.get_start, CommandStart())
     dp.message.register(documents.req_document, Command(commands="form"))
-    dp.message.register(documents.get_document, StepsDocuments.GET_DOCUMENT)
+    dp.message.register(basic.instruction, Command(commands="help"))
+    dp.message.register(documents.check_document, Command(commands="check"))
+    dp.message.register(basic.response_to_test, F.text)
+    # dp.message.register(documents.get_document, StepsDocuments)
+    dp.message.register(documents.get_document, F.document)
     # dp.message.register(documents.check_document, StepsDocuments.CHECK_DOCUMENT)
 
-    dp.message.register(get_start, CommandStart())
     try:
+        # Запускаем бота и пропускаем все накопленные входящие
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
     finally:
         await bot.session.close()

@@ -1,14 +1,17 @@
 import os
 from aiogram import Bot
-from aiogram.types import Message
+from aiogram.fsm.context import FSMContext
 from core.settings import settings
 
 
-async def download(message: Message, bot: Bot):
-    doc = await bot.get_file(message.document.file_id)
-    name_doc = message.document.file_name
-    # file_path = doc.file_path
-    await bot.download_file(
-        doc.file_path, f"{settings.bots.path_folder}\\{name_doc}"
-        # doc.file_path, destination=f"{pathfile}\\{name_doc}"
-    )
+async def download(bot: Bot, state: FSMContext):
+    data = await state.get_data()
+    files_info = data.get('files_info', [])
+    for i in files_info:
+        file_id = i["file_id"]
+        file_name = i["file_name"]
+        doc = await bot.get_file(file_id)
+        await bot.download_file(
+            doc.file_path, f"{settings.bots.path_folder}\\{file_name}"
+            # doc.file_path, destination=f"{pathfile}\\{name_doc}"
+        )

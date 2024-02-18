@@ -14,15 +14,9 @@ async def get_start(message: Message, bot: Bot):
     )
 
 
-# async def get_document(message: Message, bot: Bot):
-#     size_doc = message.document.file_size
-#     if size_doc < 90000:
-#         doc = await bot.get_file(message.document.file_id)
-#         name_doc = message.document.file_name
-#         await bot.download_file(
-#             doc.file_path, f"{settings.bots.path_folder}\\{name_doc}"
-#         )
-#     else:
-#         await message.answer(
-#             f"Документ {message.document.file_name} слишком большой возможно это не <b>Акт сверки!</b>"
-#         )
+async def response_to_test(message: Message, bot: Bot):
+    await message.answer("НУ чего ты мне пишешь?")
+
+
+async def instruction(message: Message, bot: Bot):
+    await message.answer("Принцип работы робота, следующий.")

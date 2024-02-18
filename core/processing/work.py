@@ -6,11 +6,15 @@ import logging
 import sys
 from read_xlsx import color_xlsx_cell
 from openpyxl.styles import Font, Color, PatternFill
-
-# xlsx_file = ''
-# pdf_file = ''
+from core.settings import settings
 
 
+def get_path_files(folder):
+    print(folder)
+    links_to_files = []
+    for i in os.listdir(folder):
+        print(folder+"\\"+i)
+    print(links_to_files)
 
 
 
@@ -66,18 +70,7 @@ def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
 
 
 def work_main(pdf_file, xlsx_file):
-    try:
-        all_text_from_pdf = read_pdf_file(pdf_file)
-        logging.info('Текст из pdf_file получен')
-        result = check_verification_act(all_text_from_pdf, xlsx_file)
-        logging.info('Отправлено два заголовка в чат')
-        return result
-        # list_matches_pdf_file = file_regex_search(all_text_from_pdf)
-        # logging.info('совпадения из pdf_file получены')
-        # search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
-        # logging.info('Файл xlsx_file раскрашен')
-    except Exception as e:
-        print(e, 'Error')
+    ...
 
 
 if __name__ == '__main__':
@@ -92,4 +85,5 @@ if __name__ == '__main__':
         format='%(asctime)s, %(levelname)s, %(funcName)s, '
                '%(lineno)s, %(name)s, %(message)s'
     )
-    work_main()
+    # work_main()
+    get_path_files(settings.bots.path_folder)
