@@ -17,43 +17,30 @@ async def req_document(message: Message, state: FSMContext):
 
 
 async def get_document(message: Message, state: FSMContext):
-    data = await state.get_data()  # Получение данных из состояния
-    files_info = data.get('files_info', [])  # Получение информации о файлах или пустого списка, если информации еще нет
-    file_info = {
-        'file_id': message.document.file_id,
-        'file_name': message.document.file_name,
-        'file_size': message.document.file_size,
-    }
-    files_info.append(file_info)  # Добавление информации о файле в список файлов
-    await state.update_data(files_info=files_info)  # Обновление данных в состоянии
+    # data = await state.get_data()  # Получение данных из состояния
+    # files_info = data.get('files_info', {})
+    name_file = message.document.file_name
+    if name_file.endswith(".pdf"):
+        file_pdf = {
+            'file_id': message.document.file_id,
+            'file_name': message.document.file_name,
+            'file_size': message.document.file_size,
+        }
+        await state.update_data(file_pdf=file_pdf)
+
+    elif name_file.endswith(".xlsx"):
+        file_xlsx = {
+            'file_id': message.document.file_id,
+            'file_name': message.document.file_name,
+            'file_size': message.document.file_size,
+        }
+        await state.update_data(file_xlsx=file_xlsx)
     await state.set_state(StepsDocuments.CHECK_DOCUMENT)
+    # print(data)
 
-
-async def check_document(message: Message, bot: Bot, state: FSMContext):
-    resolved_extension = [".pdf", ".xlsx"]  # Список разрешонных
-    recieved_extension = []  # Список полученых
+async def open_stste(message: Message, state: FSMContext):
     data = await state.get_data()
-    files_info = data.get('files_info', [])
-    match len(files_info):
-        case 1:
-            await message.answer("Получил Один файл. Ну что мне с ним делать. Нажми /help")
-            await state.clear()  # Очищаем состояние
-            await state.set_state(StepsDocuments.GET_DOCUMENT)
-        case 2:
-            await message.reply("Получил два файла!")
-            files_size = 50000 < (files_info[0]["file_size"] + files_info[1]["file_size"])
-            recieved_extension.append(os.path.splitext(files_info[0]["file_name"])[1])
-            recieved_extension.append(os.path.splitext(files_info[1]["file_name"])[1])
-            if Counter(resolved_extension) == Counter(recieved_extension) and files_size:
-                await message.reply("Скачиваю файлы и проверяю.")
-                await download(bot, state)  # Скачиваем файлы с телеграмма на сервер.
-                await state.clear()  # Очищаем состояние
-            else:
-                await message.reply("Что то не то с расширениями файлов! Нажми /help")
-                await state.clear()  # Очищаем состояние
-        case _:
-            await message.answer("Слушай что то перебор, почитай на /help что нужно делать!")
-            await state.clear()  # Очищаем состояние
+    print(data)
 
 
 
