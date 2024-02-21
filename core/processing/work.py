@@ -72,10 +72,7 @@ def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
     color_xlsx_cell(list_matches_pdf_file, xlsx_file)
 
 
-async def work_main(message: Message, bot: Bot, state: FSMContext):
-    data = await state.get_data()
-    file_pdf = (await bot.get_file(data['file_pdf']["file_id"])).file_path
-    file_xlsx = (await bot.get_file(data['file_xlsx']["file_id"])).file_path
+async def work_main(file_pdf, file_xlsx):
     try:
         all_text_from_pdf = read_pdf_file(file_pdf)
         logging.info('Текст из pdf_file получен')

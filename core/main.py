@@ -41,8 +41,8 @@ async def start() -> None:
     dp.message.register(basic.get_start, CommandStart())
     dp.message.register(documents.req_document, Command(commands="form"))
     dp.message.register(basic.instruction, Command(commands="help"))
-    dp.message.register(documents.open_stste, Command(commands="check"))
-    dp.message.register(documents.get_document, F.document)
+    # dp.message.register(documents.open_stste, Command(commands="check"))
+    dp.message.register(documents.get_document1, F.document)
     dp.message.register(basic.response_to_test, F.text)
 
     try:
