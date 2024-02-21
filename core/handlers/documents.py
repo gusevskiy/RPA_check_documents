@@ -27,7 +27,6 @@ async def get_document(message: Message, bot: Bot, state: FSMContext):
     else:
         await message.reply(f"Такие файлы я не обрабытываю {file_name}")
         return
-    print(data)
     # if len(data) == 2:
     #     await download(bot, state)
 
