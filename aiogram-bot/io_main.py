@@ -1,6 +1,7 @@
 import os
 import logging
 import fnmatch
+import asyncio
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters.command import Command
 from aiogram.types import FSInputFile, InlineKeyboardButton, InlineKeyboardMarkup
@@ -10,8 +11,8 @@ from core.processing.work import work_main
 load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TOKEN')
-TELEGRAM_CHAT_ID = os.getenv('CHAT_ID')
-pathfile = f"{os.path.dirname(os.path.abspath(__file__))}\\chat_files"
+TELEGRAM_CHAT_ID = os.getenv('ADMIN_ID')
+PATH_FOLDER = os.getenv('PATH_FOLDER')
 
 # Объект бота
 bot = Bot(token=TELEGRAM_TOKEN)
@@ -74,12 +75,12 @@ async def save_file(message: types.Message, bot: Bot):
         file_path = file.file_path
         name_file = message.document.file_name
         # нужно создать папку chat_files если ее нет
-        if not os.path.exists(pathfile):
-            os.makedirs(pathfile)
-        destination = f"{pathfile}\\{name_file}"
+        if not os.path.exists(PATH_FOLDER):
+            os.makedirs(PATH_FOLDER)
+        destination = f"{PATH_FOLDER}\\{name_file}"
         # Сохраняет файлы в папку
         await bot.download_file(file_path, destination=destination)
-        if create_path_files(pathfile):
+        if create_path_files(PATH_FOLDER):
             # Получаем заголовки из файлов для отправки их в чат для проверки.
             text_title = str(work_main(pdf_file, xlsx_file))
             # Отправляем заголовки в чат
@@ -125,8 +126,8 @@ async def send_message(message: types.Message):
     """
     chat_id = message.chat.id
     adm = TELEGRAM_CHAT_ID
-    file_send = pathfile + '\\' + ''.join(
-        [name for name in os.listdir(pathfile) if name.endswith('.xlsx')])
+    file_send = PATH_FOLDER + '\\' + ''.join(
+        [name for name in os.listdir(PATH_FOLDER) if name.endswith('.xlsx')])
     if str(message.chat.id) not in adm:
         await bot.send_message(message.chat.id, 'Мой хозяин вас не знает, '
                                                 'мне запрещено с '
@@ -134,7 +135,7 @@ async def send_message(message: types.Message):
     elif message.text == 'проверить':
         work_main()
         await bot.send_document(chat_id, FSInputFile(file_send))
-        delete_file(pathfile)
+        delete_file(PATH_FOLDER)
 
     else:
         await message.answer(
@@ -152,8 +153,8 @@ async def main() -> None:
     await dp.start_polling(bot)
 
 
-# if __name__ == "__main__":
-    # asyncio.run(main())
-    # if create_path_files(pathfile):
-    #     print('yes')
-    # print('no')
+if __name__ == "__main__":
+    asyncio.run(main())
+    if create_path_files(PATH_FOLDER):
+        print('yes')
+    print('no')

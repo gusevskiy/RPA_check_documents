@@ -17,6 +17,9 @@ vim input
 #### training materials
 https://docs.aiogram.dev/en/latest/dispatcher/finite_state_machine/index.html
 
+репа от видео youtube
+https://github.com/nkorgik/AiogramBotLessons/blob/master/intermediate_level/fsm_dialogs.py
+
 [Exsample training aiogram3](https://mastergroosha.github.io/aiogram-3-guide/filters-and-middlewares/)
 
 [Создание диаграмм github](https://habr.com/ru/articles/652867/) # Хабр

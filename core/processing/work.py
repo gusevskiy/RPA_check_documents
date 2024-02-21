@@ -4,20 +4,20 @@ import fitz
 import openpyxl
 import logging
 import sys
-from read_xlsx import color_xlsx_cell
+from aiogram import Bot
+
+from aiogram.types import Message, Document
+
+from aiogram.fsm.context import FSMContext
+
+from core.processing.read_xlsx import color_xlsx_cell
 from openpyxl.styles import Font, Color, PatternFill
-from core.settings import settings
+
+# xlsx_file = ''
+# pdf_file = ''
 
 
-def get_path_files(folder):
-    print(folder)
-    links_to_files = {}
-    for i in os.listdir(folder):
-        if i.endswith(".pdf"):
-            links_to_files["pdf"] = f"{folder}\\{i}"
-        if i.endswith(".xlsx"):
-            links_to_files["xlsx"] = f"{folder}\\{i}"
-    print(links_to_files)
+
 
 
 def read_pdf_file(file_path) -> str:
@@ -30,6 +30,7 @@ def read_pdf_file(file_path) -> str:
     for page in doc:
         text = page.get_text()
         all_text_from_pdf.append(text)
+    print(all_text_from_pdf)
     return str(all_text_from_pdf)
 
 
@@ -71,21 +72,35 @@ def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
     color_xlsx_cell(list_matches_pdf_file, xlsx_file)
 
 
-def work_main(pdf_file, xlsx_file):
-    ...
+async def work_main(message: Message, bot: Bot, state: FSMContext):
+    data = await state.get_data()
+    file_pdf = (await bot.get_file(data['file_pdf']["file_id"])).file_path
+    file_xlsx = (await bot.get_file(data['file_xlsx']["file_id"])).file_path
+    try:
+        all_text_from_pdf = read_pdf_file(file_pdf)
+        logging.info('Текст из pdf_file получен')
+        result = check_verification_act(all_text_from_pdf, file_xlsx)
+        logging.info('Отправлено два заголовка в чат')
+        return result
+
+        # list_matches_pdf_file = file_regex_search(all_text_from_pdf)
+        # logging.info('совпадения из pdf_file получены')
+        # search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
+        # logging.info('Файл xlsx_file раскрашен')
+    except Exception as e:
+        print(e, 'Error1')
 
 
-if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.INFO,
-        handlers=[
-            logging.FileHandler(
-                os.path.abspath('bot_log.log'), mode='w', encoding='UTF-8'
-            ),
-            logging.StreamHandler(stream=sys.stdout)
-        ],
-        format='%(asctime)s, %(levelname)s, %(funcName)s, '
-               '%(lineno)s, %(name)s, %(message)s'
-    )
-    # work_main()
-    get_path_files(settings.bots.path_folder)
+# if __name__ == '__main__':
+#     logging.basicConfig(
+#         level=logging.INFO,
+#         handlers=[
+#             logging.FileHandler(
+#                 os.path.abspath('bot_log.log'), mode='w', encoding='UTF-8'
+#             ),
+#             logging.StreamHandler(stream=sys.stdout)
+#         ],
+#         format='%(asctime)s, %(levelname)s, %(funcName)s, '
+#                '%(lineno)s, %(name)s, %(message)s'
+#     )
+#     work_main()

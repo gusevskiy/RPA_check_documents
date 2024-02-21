@@ -5,8 +5,7 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from core.utils.statedocuments import StepsDocuments
 from core.utils.downloads import download
-from core.settings import settings
-from aiogram.types.input_file import FSInputFile
+from core.processing import work
 
 
 
@@ -38,10 +37,13 @@ async def get_document(message: Message, bot: Bot, state: FSMContext):
         return
     await state.set_state(StepsDocuments.CHECK_DOCUMENT)
     data = await state.get_data()
-    print(data)
+    # print(data)
     if len(data) == 2:
-        name = data["file_pdf"]["file_id"]
-        await message.reply_document(name)
+        data = await state.get_data()
+        file_pdf = (await bot.get_file(data['file_pdf']["file_id"])).file_path
+        file_xlsx = (await bot.get_file(data['file_xlsx']["file_id"])).file_path
+        await bot.download(data.file_pdf, f"C:\\robots\\RPA_check_documents\\doc\\name.pdf")
+
 
 
 async def open_stste(message: Message, state: FSMContext):
