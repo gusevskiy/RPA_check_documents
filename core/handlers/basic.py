@@ -1,7 +1,6 @@
 from aiogram import Bot
 import logging
 from aiogram.types import Message
-from core.utils.downloads import download
 from core.settings import settings
 
 

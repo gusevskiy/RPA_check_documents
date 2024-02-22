@@ -72,32 +72,35 @@ def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
     color_xlsx_cell(list_matches_pdf_file, xlsx_file)
 
 
-async def work_main(file_pdf, file_xlsx):
+def work_main(file_pdf, file_xlsx):
     try:
         all_text_from_pdf = read_pdf_file(file_pdf)
         logging.info('Текст из pdf_file получен')
         result = check_verification_act(all_text_from_pdf, file_xlsx)
         logging.info('Отправлено два заголовка в чат')
-        return result
+        print(result)
+        # return result
 
-        # list_matches_pdf_file = file_regex_search(all_text_from_pdf)
-        # logging.info('совпадения из pdf_file получены')
-        # search_matches_xlsx_file(list_matches_pdf_file, xlsx_file)
-        # logging.info('Файл xlsx_file раскрашен')
+        list_matches_pdf_file = file_regex_search(all_text_from_pdf)
+        logging.info('совпадения из pdf_file получены')
+        search_matches_xlsx_file(list_matches_pdf_file, file_xlsx)
+        logging.info('Файл xlsx_file раскрашен')
     except Exception as e:
         print(e, 'Error1')
 
 
-# if __name__ == '__main__':
-#     logging.basicConfig(
-#         level=logging.INFO,
-#         handlers=[
-#             logging.FileHandler(
-#                 os.path.abspath('bot_log.log'), mode='w', encoding='UTF-8'
-#             ),
-#             logging.StreamHandler(stream=sys.stdout)
-#         ],
-#         format='%(asctime)s, %(levelname)s, %(funcName)s, '
-#                '%(lineno)s, %(name)s, %(message)s'
-#     )
-#     work_main()
+if __name__ == '__main__':
+    file_pdf = "C:\\robots\\RPA_check_documents\\doc\\Акт_сверки_взаиморасчетов_№_16_от_12_октября_2023 г_1.pdf"
+    file_xlsx = "C:\\robots\\RPA_check_documents\\doc\\акт эф решение.xlsx"
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[
+            logging.FileHandler(
+                os.path.abspath('bot_log.log'), mode='w', encoding='UTF-8'
+            ),
+            logging.StreamHandler(stream=sys.stdout)
+        ],
+        format='%(asctime)s, %(levelname)s, %(funcName)s, '
+               '%(lineno)s, %(name)s, %(message)s'
+    )
+    work_main(file_pdf, file_xlsx)

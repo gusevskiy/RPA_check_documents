@@ -2,16 +2,31 @@ import os
 import pathlib
 from collections import Counter
 from aiogram import Bot
+from core.settings import settings
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from core.utils.statedocuments import StepsDocuments
-from core.utils.downloads import download, delete_file
+from core.utils.downloads import download_file, delete_file
 from core.processing import work
 
 
 async def check_state(message: Message, bot: Bot, state: FSMContext):
+    file_pdf = ""
+    file_xlsx = ""
+    folder = settings.bots.path_folder
     data = await state.get_data()
-    print(data)
+    for i in os.listdir(folder):
+        if i.endswith(".pdf"):
+            file_pdf = f"{folder}\\{i}"
+        if i.endswith(".xlsx"):
+            file_xlsx = f"{folder}\\{i}"
+    work.work_main(file_pdf, file_xlsx)
+    # print(file_pdf)
+    # file_pdf = (await bot.get_file(data['file_pdf']["file_id"])).file_path
+    # file_xlsx = (await bot.get_file(data['file_xlsx']["file_id"])).file_path
+
+    # data = await state.get_data()
+    # print(data)
 
 
 async def get_document(message: Message, bot: Bot, state: FSMContext):
@@ -35,7 +50,7 @@ async def get_document(message: Message, bot: Bot, state: FSMContext):
         for i in data["documents"]:
             key_path = i["file_path"]
             key_name = i["file_name"]
-            await download(key_path, key_name, bot)
+            await download_file(key_path, key_name, bot)
 
 
 async def req_document(message: Message, state: FSMContext):
