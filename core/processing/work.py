@@ -4,20 +4,8 @@ import fitz
 import openpyxl
 import logging
 import sys
-from aiogram import Bot
-
-from aiogram.types import Message, Document
-
-from aiogram.fsm.context import FSMContext
-
 from core.processing.read_xlsx import color_xlsx_cell
 from openpyxl.styles import Font, Color, PatternFill
-
-# xlsx_file = ''
-# pdf_file = ''
-
-
-
 
 
 def read_pdf_file(file_path) -> str:
@@ -72,13 +60,20 @@ def search_matches_xlsx_file(list_matches_pdf_file, xlsx_file):
     color_xlsx_cell(list_matches_pdf_file, xlsx_file)
 
 
-def work_main(file_pdf, file_xlsx):
+def work_main(folder):
+    file_pdf = ""
+    file_xlsx = ""
+    for i in os.listdir(folder):
+        if i.endswith(".pdf"):
+            file_pdf = f"{folder}\\{i}"
+        if i.endswith(".xlsx"):
+            file_xlsx = f"{folder}\\{i}"
     try:
         all_text_from_pdf = read_pdf_file(file_pdf)
         logging.info('Текст из pdf_file получен')
         result = check_verification_act(all_text_from_pdf, file_xlsx)
         logging.info('Отправлено два заголовка в чат')
-        print(result)
+        # print(result)
         # return result
 
         list_matches_pdf_file = file_regex_search(all_text_from_pdf)
@@ -90,8 +85,6 @@ def work_main(file_pdf, file_xlsx):
 
 
 if __name__ == '__main__':
-    file_pdf = "C:\\robots\\RPA_check_documents\\doc\\Акт_сверки_взаиморасчетов_№_16_от_12_октября_2023 г_1.pdf"
-    file_xlsx = "C:\\robots\\RPA_check_documents\\doc\\акт эф решение.xlsx"
     logging.basicConfig(
         level=logging.INFO,
         handlers=[
@@ -103,4 +96,5 @@ if __name__ == '__main__':
         format='%(asctime)s, %(levelname)s, %(funcName)s, '
                '%(lineno)s, %(name)s, %(message)s'
     )
-    work_main(file_pdf, file_xlsx)
+    # work_main("C:\\robots\\RPA_check_documents\\doc")
+    work_main("C:\\robots\\financial_manager_process\\Check_excel\\test_doc\\2")
