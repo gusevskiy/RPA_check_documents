@@ -16,8 +16,8 @@ def read_pdf_file(file_path) -> str:
     doc = fitz.open(file_path)
     all_text_from_pdf = []
     for page in doc:
-        text = page.get_text()
-        all_text_from_pdf.append(text)
+        text = page.get_textbox("text")
+        all_text_from_pdf.append(text+"\n")
     print(all_text_from_pdf)
     return str(all_text_from_pdf)
 
@@ -46,8 +46,10 @@ def file_regex_search(all_text_from_pdf: str) -> list:
     Принимает строку текста,
     возвращает список со всеми найденными совпадениями
     """
-    reg = r"\d{2}\.\d{2}\.\d{2}[\s|\\n]*[А-яЁё]{0,7}[\s|\\n]*\(\d{0,4}[\s|\\n]*от[\s|\\n]\d{2}[\s|\\n]*\.\d{2}\.\d{4}\)[\s|\\n]*\d{0,4}[\s|\\n]*\d{3}\,\d{2}"
+    # reg = r"\d{2}\.\d{2}\.\d{2}[\s|\\n]*[А-яЁё]{0,7}[\s|\\n]*\(\d{0,4}[\s|\\n]*от[\s|\\n]\d{2}[\s|\\n]*\.\d{2}\.\d{4}\)[\s|\\n]*\d{0,4}[\s|\\n]*\d{3}\,\d{2}"
+    reg = r"№\s*(\S+)\s*от\s*\d{2}\s*\d{2}\s*\d{4}(\S+)\d{1,3}\s*\d{3}\,\d{2}"
     list_matches_pdf_file = re.findall(reg, all_text_from_pdf)
+    print(list_matches_pdf_file)
     return list_matches_pdf_file
 
 
@@ -97,4 +99,4 @@ if __name__ == '__main__':
                '%(lineno)s, %(name)s, %(message)s'
     )
     # work_main("C:\\robots\\RPA_check_documents\\doc")
-    work_main("C:\\robots\\RPA_check_documents\\test_doc\\2")
+    work_main("C:\\robots\\RPA_check_documents\\test_doc\\1")

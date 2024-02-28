@@ -21,10 +21,11 @@ def color_xlsx_cell(list_matches_pdf_file, xlsx_file):
         # Разбиваем на группы каждый элемент из list_matches_pdf_file
         # Группы =>  date_document, number_document, amount_invoice
         dict_match = re.search(reg_groups, match).groupdict()
+        pdf_date = dict_match['date_document']  # Даты не используются
+        pdf_number = dict_match['number_document']
+        pdf_amount = dict_match['amount_invoice'].replace(' ', '').split(",")[0].split(",")[0]
+        flag_pdf_number = False
         for row in sheet.iter_rows():  # итерируемся по каждой строке в xlsx_file
-            pdf_date = dict_match['date_document']  # Даты не используются
-            pdf_number = dict_match['number_document']
-            pdf_amount = dict_match['amount_invoice'].replace(' ', '').split(",")[0].split(",")[0]
             xlsx_column_1 = row[1].value  # Значение колонка номера строки
             xlsx_column_3 = row[3].value  # Значение колонка Документ
             xlsx_column_4 = row[4].value  # Значение колонка Дебет
@@ -32,21 +33,22 @@ def color_xlsx_cell(list_matches_pdf_file, xlsx_file):
             # Если xlsx_column_1 число, чтобы начать с табличной части
             # И чтоб повторно по  уже обработанным строкам не бегать xlsx_column_1 нет в iter_list
             if isinstance(xlsx_column_1, int) and xlsx_column_1 not in iter_list:
-                print(iter_list)
                 if pdf_number in xlsx_column_3 and (int(pdf_amount) == xlsx_column_4 or int(pdf_amount) == xlsx_column_5):
                     iter_list.append(xlsx_column_1)
                     # множественное присваивание a, b, c = (5,) * 3
-                    row[3].fill, row[4].fill, row[5].fill = (PatternFill(fill_type='solid', start_color='00FF00'),)*3  # green
-                    continue  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
+                    # green, номер и суммы совпадают в обоих документах.
+                    row[3].fill, row[4].fill, row[5].fill = (PatternFill(fill_type='solid', start_color='00FF00'),)*3
+                    flag_pdf_number = True
+                    break  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
                 elif pdf_number in xlsx_column_3 and (int(pdf_amount) != xlsx_column_4 or int(pdf_amount) != xlsx_column_5):
                     iter_list.append(xlsx_column_1)  # Добавляем в iter_list только если в этой строке есть действие
                     # множественное присваивание a, b, c = (5,) * 3
-                    row[3].fill, row[4].fill, row[5].fill = (PatternFill(fill_type='solid', start_color='FF9999'),)*3  # pink
-                    # тк совпадение найдено дальше искать не нужно
-                    continue  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
-                # else:
-                    # Номер документа из PDF который не нашли в xlsx добавляем в список не найденных
-                    # list_none.append(pdf_number)
+                    # pink, номер совпадает, а сумму нет
+                    row[3].fill, row[4].fill, row[5].fill = (PatternFill(fill_type='solid', start_color='FF9999'),)*3
+                    flag_pdf_number = True
+                    break  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
+        if not flag_pdf_number:  # Если номер не найден во внутренней накладной добавляем его в список для возврата.
+            list_none.append(pdf_number)
 
     # Итерируемся по ячейкам, ищем не закрашенные => это значит что данная строка есть только в xlsx_file
     for row in sheet.iter_rows():  # итерируемся по каждой строке в xlsx_file
