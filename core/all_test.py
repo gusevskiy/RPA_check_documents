@@ -1,9 +1,17 @@
-from collections import Counter
+import openpyxl
+import re
+from openpyxl.styles import PatternFill
 
-ss = {'files_info': [{'file_id': 'BQACAgIAAxkBAAIBcWXPH2SQuD0KlOxPqkUrSv3zguwLAAJuRAACHlt5SiJ5VqTrSpICNAQ', 'file_name': 'акт эф решение.xlsx', 'file_size': 12643}, {'file_id': 'BQACAgIAAxkBAAIBcmXPH2QEWAJhr9VA61r7WYohw-btAAJvRAACHlt5StHpGikviXIKNAQ', 'file_name': 'Акт_сверки_взаиморасчетов_№_16_от_12_октября_2023\xa0г_1.pdf', 'file_size': 58823}]}
-print(len(ss.get("files_info")))
 
-# list_array1 = [".pdf", ".xlsx"]
-# list_array2 = [".xlsx", ".pdf"]
-#
-# print(Counter(list_array1) == Counter(list_array2))
+def color_xlsx_cell(xlsx_file):
+    wb = openpyxl.reader.excel.load_workbook(filename=xlsx_file)
+    wb.active = 0
+    sheet = wb.active
+
+    for row in sheet.iter_rows():
+        print(row[1].value)
+
+if __name__ == '__main__':
+    a, b, c = (5,)*3
+    print(b)
+    # color_xlsx_cell("C:\\robots\\RPA_check_documents\\test_doc\\1\\акт эф решение.xlsx")

@@ -16,6 +16,7 @@ def color_xlsx_cell(list_matches_pdf_file, xlsx_file):
     wb.active = 0
     sheet = wb.active
     iter_list = []  # Для исключения уже закрашенных строк
+    list_none = []  # Для номеров накладных которые не были найдены в xlsx_file
     for match in list_matches_pdf_file:
         # Разбиваем на группы каждый элемент из list_matches_pdf_file
         # Группы =>  date_document, number_document, amount_invoice
@@ -27,36 +28,36 @@ def color_xlsx_cell(list_matches_pdf_file, xlsx_file):
             xlsx_column_1 = row[1].value  # Значение колонка номера строки
             xlsx_column_3 = row[3].value  # Значение колонка Документ
             xlsx_column_4 = row[4].value  # Значение колонка Дебет
-            xlsx_column_5 = row[5].value  # Зничение колонка Кредит
-            # Если xlsx_column_1 цисло и xlsx_column_1 нет в iter_list
-            if isinstance(xlsx_column_1, int):  # and xlsx_column_1 not in iter_list:
-                # print(pdf_number, "search", xlsx_column_3)
+            xlsx_column_5 = row[5].value  # Значение колонка Кредит
+            # Если xlsx_column_1 число, чтобы начать с табличной части
+            # И чтоб повторно по  уже обработанным строкам не бегать xlsx_column_1 нет в iter_list
+            if isinstance(xlsx_column_1, int) and xlsx_column_1 not in iter_list:
+                print(iter_list)
                 if pdf_number in xlsx_column_3 and (int(pdf_amount) == xlsx_column_4 or int(pdf_amount) == xlsx_column_5):
                     iter_list.append(xlsx_column_1)
-                    row[3].fill = PatternFill(fill_type='solid', start_color='00FF00')  # green
-                    row[4].fill = PatternFill(fill_type='solid', start_color='00FF00')
-                    row[5].fill = PatternFill(fill_type='solid', start_color='00FF00')
-                    break  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
-                if pdf_number in xlsx_column_3 and (int(pdf_amount) != xlsx_column_4 or int(pdf_amount) != xlsx_column_5):
-                    iter_list.append(xlsx_column_1)
-                    row[3].fill = PatternFill(fill_type='solid', start_color='FF9999')  # pink
-                    row[4].fill = PatternFill(fill_type='solid', start_color='FF9999')
-                    row[5].fill = PatternFill(fill_type='solid', start_color='FF9999')
-                    break  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
-                else:
-                    print(pdf_number)
+                    # множественное присваивание a, b, c = (5,) * 3
+                    row[3].fill, row[4].fill, row[5].fill = (PatternFill(fill_type='solid', start_color='00FF00'),)*3  # green
+                    continue  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
+                elif pdf_number in xlsx_column_3 and (int(pdf_amount) != xlsx_column_4 or int(pdf_amount) != xlsx_column_5):
+                    iter_list.append(xlsx_column_1)  # Добавляем в iter_list только если в этой строке есть действие
+                    # множественное присваивание a, b, c = (5,) * 3
+                    row[3].fill, row[4].fill, row[5].fill = (PatternFill(fill_type='solid', start_color='FF9999'),)*3  # pink
+                    # тк совпадение найдено дальше искать не нужно
+                    continue  # Выход из внутреннего цикла и переход к следующему match из list_matches_pdf_file
+                # else:
+                    # Номер документа из PDF который не нашли в xlsx добавляем в список не найденных
+                    # list_none.append(pdf_number)
 
     # Итерируемся по ячейкам, ищем не закрашенные => это значит что данная строка есть только в xlsx_file
-    for row in sheet.iter_rows():  # итерируемся по кождой строке в xlsx_file
+    for row in sheet.iter_rows():  # итерируемся по каждой строке в xlsx_file
         xlsx_column_1 = row[1].value  # Значение колонка номера строки
         xlsx_column_3 = row[3].fill  # Значение колонка Документ
         if isinstance(xlsx_column_1, int) and row[3].fill.fgColor.value == "00000000":
-            row[3].fill = PatternFill(fill_type='solid', start_color='FFFF99')  # yellow
-            row[4].fill = PatternFill(fill_type='solid', start_color='FFFF99')
-            row[5].fill = PatternFill(fill_type='solid', start_color='FFFF99')
+            row[3].fill, row[4].fill, row[5].fill = (PatternFill(fill_type='solid', start_color='FFFF99'),)*3  # yellow
     # Пересохраняем xlsx_file
     wb.save(xlsx_file)
-    
+
+    print(list_none)
 
 
 # if __name__ == '__main__':

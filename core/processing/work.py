@@ -97,4 +97,4 @@ if __name__ == '__main__':
                '%(lineno)s, %(name)s, %(message)s'
     )
     # work_main("C:\\robots\\RPA_check_documents\\doc")
-    work_main("C:\\robots\\financial_manager_process\\Check_excel\\test_doc\\2")
+    work_main("C:\\robots\\RPA_check_documents\\test_doc\\2")
